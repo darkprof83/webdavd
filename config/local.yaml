@@ -1,0 +1,9 @@
+log:
+  env: "local"
+server:
+  address: "192.168.1.1:8083"
+  prefix: "/GTD/"
+  username: "darkprof"
+  salt: "test salt"
+  passhash: "b69a2fc92121562277784e374ab1b77366155778f4faa1f5bdffbe0acf4cc82757417079ed5f06dea51ac82f09d3264cac870423d3cf02efd69de8307fdedf65"
+  dir: "/home/darkprof/gtd/GTD"
