@@ -45,11 +45,6 @@ func (log *Logger) Setup(env string) error {
 		return ErrIncorrectProfile
 	}
 	log.Logger = *p.setup(p.out, p.level)
-	if p.level == slog.LevelDebug {
-		log.Info("debug messages are enabled")
-	} else {
-		log.Info("debug messages are disabled")
-	}
 	return nil
 }
 

@@ -17,7 +17,6 @@ const (
 func main() {
 	log := logger.New()
 	log.Info("starting webdavd")
-	// log.Debug("debug messages are enabled")
 
 	var path string
 	flag.StringVar(&path, "config", configPath, "path to the configuration file")
@@ -34,7 +33,7 @@ func main() {
 	cfg.MustLoad(path)
 	if err := log.Setup(cfg.Env); err != nil {
 		log.Error(err.Error(), slog.String("env", cfg.Env))
-	} else {
-		log.Info("the profile is used for logging", slog.String("env", cfg.Env))
 	}
+	log.Info("the profile is used for logging", slog.String("env", cfg.Env))
+	log.Debug("debug messages are enabled")
 }
