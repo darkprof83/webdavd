@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
@@ -16,12 +17,15 @@ type Log struct {
 }
 
 type Server struct {
-	Address  string `yaml:"address" env-required:"true"`
-	Prefix   string `yaml:"prefix" env-default:"/GTD/"`
-	Username string `yaml:"username" env-required:"true"`
-	Salt     string `yaml:"salt" env-default:"test salt"`
-	Passhash string `yaml:"passhash" env-required:"true"`
-	Dir      string `yaml:"dir" env-required:"true"`
+	Address     string        `yaml:"address" env-required:"true"`
+	Timeout     time.Duration `yaml:"timeout" env-default:"10s"`
+	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s"`
+	HaltTimeout time.Duration `yaml:"halt_timeout" env-default:"10s"`
+	Prefix      string        `yaml:"prefix" env-default:"/"`
+	Username    string        `yaml:"username" env-required:"true"`
+	Salt        string        `yaml:"salt" env-default:"test salt"`
+	Passhash    string        `yaml:"passhash" env-required:"true"`
+	Dir         string        `yaml:"dir" env-required:"true"`
 }
 
 func New() *Config {

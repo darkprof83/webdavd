@@ -2,8 +2,11 @@ log:
   env: "local"
 server:
   address: "192.168.1.1:8083"
-  prefix: "/GTD/"
+  timeout: 5s
+  idle_timeout: 30s
+  halt_timeout: 10s
+  prefix: "/GTD"
   username: "darkprof"
-  salt: "test salt"
-  passhash: "b69a2fc92121562277784e374ab1b77366155778f4faa1f5bdffbe0acf4cc82757417079ed5f06dea51ac82f09d3264cac870423d3cf02efd69de8307fdedf65"
-  dir: "/home/darkprof/gtd/GTD"
+  salt: "210f19e2-5b18-497a-a008-de2d6609703d"
+  passhash: "48fc68263ad804944cf2cabe1dfad65c6a80e1226a977ad8aefeb90111ec4011"
+  dir: "/home/darkprof/gocryptfs/GTD"
