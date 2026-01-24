@@ -65,9 +65,9 @@ func main() {
 	router.Use(middleware.RealIP)
 	router.Use(mwlog.New(&log.Logger))
 	router.Use(mwhash.New(cfg.Salt, cfg.Username, cfg.Passhash))
+	router.Use(middleware.StripSlashes)
 	router.Use(middleware.Recoverer)
 
-	// root := handler.New(log, cfg.Prefix, cfg.Dir)
 	fs := &webdav.Handler{
 		Prefix:     cfg.Prefix,
 		FileSystem: webdav.Dir(cfg.Dir),
