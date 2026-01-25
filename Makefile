@@ -14,3 +14,18 @@ $(WDCMD): cmd/$(WEBDAVD)/*.go $(call rwildcard,internal/,*.go)
 
 $(HASHCMD): cmd/$(WDHASH)/*.go $(call rwildcard,internal/,*.go)
 	go build -C cmd/$(WDHASH)
+
+.PHONY: install
+install:
+	install -Dm755 -t "$(DESTDIR)/usr/bin/" $(WDCMD)
+	install -Dm755 -t "$(DESTDIR)/usr/bin/" $(HASHCMD)
+
+.PHONY: uninstall
+uninstall:
+	rm -f "$(DESTDIR)/usr/bin/$(WEBDAVD)"
+	rm -f "$(DESTDIR)/usr/bin/$(WDHASH)"
+
+.PHONY: clean
+clean:
+	rm -f $(WDCMD)
+	rm -f $(HASHCMD)
