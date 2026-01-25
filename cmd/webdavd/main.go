@@ -80,7 +80,13 @@ func main() {
 			}
 		},
 	}
-	router.Handle(cfg.Prefix, fs)
+	handle := func(w http.ResponseWriter, r *http.Request) {
+		fs.ServeHTTP(w, r)
+	}
+	router.Route(cfg.Prefix, func(r chi.Router) {
+		r.HandleFunc("/", handle)
+		r.HandleFunc("/*", handle)
+	})
 
 	log.Info("starting server",
 		slog.String("address", cfg.Address),
