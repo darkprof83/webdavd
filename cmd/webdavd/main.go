@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"log/slog"
@@ -110,7 +111,7 @@ func main() {
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
 	go func() {
-		if err := sec.ListenAndServe(srv, cfg); err != nil {
+		if err := sec.ListenAndServe(srv, cfg); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Error("failed to start server", toattr.Err(err))
 		}
 	}()
