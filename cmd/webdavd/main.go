@@ -14,6 +14,7 @@ import (
 	"github.com/darkprof83/webdavd/internal/logger"
 	"github.com/darkprof83/webdavd/internal/middleware/mwhash"
 	"github.com/darkprof83/webdavd/internal/middleware/mwlog"
+	"github.com/darkprof83/webdavd/internal/security"
 	"github.com/darkprof83/webdavd/pkg/toattr"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -61,12 +62,22 @@ func main() {
 	log.Debug("debug messages are enabled")
 
 	router := chi.NewRouter()
+	router.Use(middleware.StripSlashes)
 	router.Use(middleware.RequestID)
 	router.Use(middleware.RealIP)
 	router.Use(mwlog.New(&log.Logger))
 	router.Use(mwhash.New(cfg.Salt, cfg.Username, cfg.Passhash))
-	router.Use(middleware.StripSlashes)
 	router.Use(middleware.Recoverer)
+
+	var secstr string
+	if _, ok := security.Security[cfg.Security]; !ok {
+		secstr = "none"
+	} else {
+		secstr = cfg.Security
+	}
+	log.Info("security is", slog.String("tls", secstr))
+	sec := security.Security[secstr]
+	srv := sec.Server(router, cfg)
 
 	fs := &webdav.Handler{
 		Prefix:     cfg.Prefix,
@@ -81,6 +92,7 @@ func main() {
 		},
 	}
 	handle := func(w http.ResponseWriter, r *http.Request) {
+		sec.ServeHTTP(w, r)
 		fs.ServeHTTP(w, r)
 	}
 	router.Route(cfg.Prefix, func(r chi.Router) {
@@ -97,16 +109,8 @@ func main() {
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
-	srv := &http.Server{
-		Addr:         cfg.Address,
-		Handler:      router,
-		ReadTimeout:  cfg.Timeout,
-		WriteTimeout: cfg.Timeout,
-		IdleTimeout:  cfg.IdleTimeout,
-	}
-
 	go func() {
-		if err := srv.ListenAndServe(); err != nil {
+		if err := sec.ListenAndServe(srv, cfg); err != nil {
 			log.Error("failed to start server", toattr.Err(err))
 		}
 	}()

@@ -1,11 +1,11 @@
 log:
-  env: "local"
+  env: "dev"
 server:
   address: "192.168.1.1:8083"
   security: "tls12"
   cert: "/home/darkprof/.config/webdavd/webdav.rsa.crt"
   key: "/home/darkprof/.config/webdavd/webdav.rsa.key"
-  timeout: 5s
+  timeout: 15s
   idle_timeout: 30s
   halt_timeout: 10s
   prefix: "/GTD"

@@ -18,6 +18,9 @@ type Log struct {
 
 type Server struct {
 	Address     string        `yaml:"address" env-required:"true"`
+	Security    string        `yaml:"security" env-required:"true"`
+	Cert        string        `yaml:"cert" env-default:"webdav.rsa.crt"`
+	Key         string        `yaml:"key" env-default:"webdav.rsa.key"`
 	Timeout     time.Duration `yaml:"timeout" env-default:"10s"`
 	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s"`
 	HaltTimeout time.Duration `yaml:"halt_timeout" env-default:"10s"`
