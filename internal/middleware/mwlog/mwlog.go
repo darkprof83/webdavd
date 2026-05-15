@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5/middleware"
+	"golang.org/x/net/webdav"
 )
 
 func New(log *slog.Logger) func(next http.Handler) http.Handler {
@@ -28,7 +29,7 @@ func New(log *slog.Logger) func(next http.Handler) http.Handler {
 			t1 := time.Now()
 			defer func() {
 				entry.DebugContext(r.Context(), "request completed",
-					slog.Int("status", ww.Status()),
+					slog.String("status", webdav.StatusText(ww.Status())),
 					slog.Int("bytes", ww.BytesWritten()),
 					slog.String("duration", time.Since(t1).String()),
 				)
