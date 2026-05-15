@@ -39,5 +39,5 @@ func (s *TLS12) Server(router http.Handler, cfg *config.Config) *http.Server {
 }
 
 func (s *TLS12) ListenAndServe(srv *http.Server, cfg *config.Config) error {
-	return srv.ListenAndServeTLS(cfg.Cert, cfg.Key)
+	return http.ListenAndServeTLS(cfg.Address, cfg.Cert, cfg.Key, srv.Handler)
 }

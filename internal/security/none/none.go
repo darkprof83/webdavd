@@ -23,5 +23,5 @@ func (s *None) Server(router http.Handler, cfg *config.Config) *http.Server {
 }
 
 func (s *None) ListenAndServe(srv *http.Server, cfg *config.Config) error {
-	return srv.ListenAndServe()
+	return http.ListenAndServe(cfg.Address, srv.Handler)
 }
